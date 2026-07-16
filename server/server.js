@@ -68,7 +68,29 @@ initSocket(io);
 app.set('io', io);
 
 // Security middleware
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: [
+          "'self'",
+          'data:',
+          'blob:',
+          'https://images.unsplash.com',
+          'https://res.cloudinary.com',
+          'https://*.cloudinary.com',
+          'https://placehold.co',
+        ],
+        connectSrc: ["'self'", 'wss:', 'ws:'],
+        fontSrc: ["'self'", 'data:'],
+        mediaSrc: ["'self'", 'https://res.cloudinary.com'],
+      },
+    },
+  })
+);
 app.use(mongoSanitize());
 
 // CORS
